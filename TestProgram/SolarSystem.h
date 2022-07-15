@@ -1,0 +1,43 @@
+#ifndef SOLARSYSTEM_H
+#define SOLARSYSTEM_H
+
+#include "Planet.h"
+
+#define NUMBER_OF_PLANETS 4
+#define MOTOR_DEGREES_PER_STEP 3.6
+#define MOTOR_STEPS_PER_RESOLUTION 100 // 360degree / MOTOR_DEGREES_PER_STEP
+
+
+#define MERCURY_PINS 8, 9, 10, 11
+#define MERCURY_ZERO_POS_PIN 43 // 12 
+#define MERCURY_REAL_SECONDS_PER_STEP 25335
+Planet Mercury("Mercury", PlanetType::Mercury, MOTOR_STEPS_PER_RESOLUTION, MERCURY_PINS, MERCURY_ZERO_POS_PIN, MERCURY_REAL_SECONDS_PER_STEP);
+
+
+#define VENUS_PINS 3, 4, 5, 6
+#define VENUS_ZERO_POS_PIN 42 // 7
+#define VENUS_REAL_SECONDS_PER_STEP 64713
+Planet Venus("Venus", PlanetType::Venus, MOTOR_STEPS_PER_RESOLUTION, VENUS_PINS, VENUS_ZERO_POS_PIN, VENUS_REAL_SECONDS_PER_STEP);
+
+
+#define EARTH_PINS 18, 17, 16, 15
+#define EARTH_ZERO_POS_PIN 41 // 14
+#define EARTH_REAL_SECONDS_PER_STEP 105193
+Planet Earth("Earth", PlanetType::Earth, MOTOR_STEPS_PER_RESOLUTION, EARTH_PINS, EARTH_ZERO_POS_PIN, EARTH_REAL_SECONDS_PER_STEP);
+
+
+#define MARS_PINS 29, 27, 25, 23
+#define MARS_ZERO_POS_PIN 50 // 24
+#define MARS_REAL_SECONDS_PER_STEP 197850
+Planet Mars("Mars", PlanetType::Mars, MOTOR_STEPS_PER_RESOLUTION, MARS_PINS, MARS_ZERO_POS_PIN, MARS_REAL_SECONDS_PER_STEP);
+
+Planet* SolarSystem[NUMBER_OF_PLANETS];
+void SetUpSolarSystem()
+{
+  SolarSystem[0] = &Mercury;
+  SolarSystem[1] = &Venus;
+  SolarSystem[2] = &Earth;
+  SolarSystem[3] = &Mars;
+}
+
+#endif // SOLARSYSTEM_H
