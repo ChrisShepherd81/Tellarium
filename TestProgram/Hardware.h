@@ -3,7 +3,7 @@
 
 #include <Button.h>
 
-#define BUTTON_PIN 19
+#define BUTTON_PIN 54
 
 Button FastForwardButton(BUTTON_PIN);
 
