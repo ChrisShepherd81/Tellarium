@@ -11,7 +11,7 @@ Planet::Planet(String name, PlanetType type,
   , m_ReedContact(reed_pin)
   , m_RealSecondsPerStep(real_seconds_per_step)
 {
-  m_ReedContact.begin();
+  pinMode(m_ReedContact, INPUT);
 }
 
 PlanetType Planet::getType() const
@@ -53,5 +53,10 @@ String Planet::getName() const
 
 bool Planet::isReferencePositionReached()
 {
-  return m_ReedContact.pressed();
+  for(int i=0; i < 100; ++i)
+  {
+    if(digitalRead(m_ReedContact) == 1)
+      return true;
+  }
+  return digitalRead(m_ReedContact) == 1;
 }

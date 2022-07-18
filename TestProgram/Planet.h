@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include <Stepper.h>
-#include <Button.h>
 
 enum class PlanetType{Mercury, Venus, Earth, Mars, Invalid};
 
@@ -32,7 +31,7 @@ private:
   String m_Name;
   PlanetType m_Type;
   Stepper m_Stepper;
-  Button m_ReedContact;
+  int m_ReedContact;
   unsigned long m_RealSecondsPerStep;
   
   unsigned long m_StepsMade = 0;
