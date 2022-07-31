@@ -26,6 +26,7 @@ public:
   void makeSteps(int steps);
   void setSpeed(int speed);
   void searchZeroPosition();
+  void stopMotor();
 
 private:
   String m_Name;
@@ -33,6 +34,7 @@ private:
   Stepper m_Stepper;
   int m_ReedContact;
   unsigned long m_RealSecondsPerStep;
+  int m_Pins[4];
   
   unsigned long m_StepsMade = 0;
 };

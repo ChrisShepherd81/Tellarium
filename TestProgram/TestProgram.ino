@@ -169,6 +169,7 @@ void RunPlanet(Planet* planet)
   {
     planet->makeStep();
   }
+  planet->stopMotor();
 }
 
 void RunAllPlanets()

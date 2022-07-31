@@ -12,6 +12,10 @@ Planet::Planet(String name, PlanetType type,
   , m_RealSecondsPerStep(real_seconds_per_step)
 {
   pinMode(m_ReedContact, INPUT);
+  m_Pins[0] = pin_1;
+  m_Pins[1] = pin_2;
+  m_Pins[2] = pin_3;
+  m_Pins[3] = pin_4;
 }
 
 PlanetType Planet::getType() const
@@ -44,6 +48,14 @@ void Planet::makeSteps(int steps)
 void Planet::setSpeed(int speed)
 {
   m_Stepper.setSpeed(speed);
+}
+
+void Planet::stopMotor()
+{
+  for(int i=0; i<4; ++i)
+  {
+    digitalWrite(m_Pins[i], LOW);
+  }
 }
 
 String Planet::getName() const
