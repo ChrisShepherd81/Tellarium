@@ -4,6 +4,8 @@
 #include <Button.h>
 #include <DCF77.h>
 
+#define DCFSplitTime 140
+
 #define BUTTON_PIN 53
 Button FastForwardButton(BUTTON_PIN);
 
