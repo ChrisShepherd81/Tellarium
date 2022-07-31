@@ -13,7 +13,7 @@ Button FastForwardButton(BUTTON_PIN);
 class DCFClock
 {
 public:
-  DCFClock() : m_dcf(DCF_PIN,DCF_INTERRUPT)
+  DCFClock() : m_dcf(DCF_PIN,DCF_INTERRUPT, true)
   {
     m_dcf.Start();
   }
