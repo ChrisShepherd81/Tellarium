@@ -2,7 +2,7 @@
 #define HARDWARE_H
 
 #include <Button.h>
-#include <DCF77.h>
+#include "DCF77.h"
 
 #define BUTTON_PIN 53
 Button FastForwardButton(BUTTON_PIN);
