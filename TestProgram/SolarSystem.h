@@ -38,4 +38,51 @@ void SetUpSolarSystem()
   SolarSystem[3] = &Mars;
 }
 
+bool AllPlanetsInReferencePosition()
+{
+  for(int i = 0; i < NUMBER_OF_PLANETS; ++i)
+  {
+    if(!SolarSystem[i]->isReferencePositionReached())
+    {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+void GoToStartPosition()
+{
+  SetUpSolarSystem();
+  
+  Mercury.setSpeed(10);
+  Venus.setSpeed(10);
+  Earth.setSpeed(10);
+  Mars.setSpeed(10);
+
+  for(int i = 0; i < NUMBER_OF_PLANETS; ++i)
+  {
+    // already (near) at reference position
+    while(SolarSystem[i]->isReferencePositionReached())
+    {
+      SolarSystem[i]->makeSteps(5);
+    }
+  }
+
+  while(!AllPlanetsInReferencePosition())
+  {
+     for(int i = 0; i < NUMBER_OF_PLANETS; ++i)
+     {
+        if(!SolarSystem[i]->isReferencePositionReached())
+        {
+          SolarSystem[i]->makeStep();
+        }
+        else
+        {
+          SolarSystem[i]->stopMotor();
+        }
+     }
+  }
+}
+
 #endif // SOLARSYSTEM_H

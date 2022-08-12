@@ -35,8 +35,13 @@ void loop() {
     break;
   case 6:
     ReadPin();
+    break;
   case 7:
     SetTime();
+    break;
+  case 8:
+    GoToStartPosition();
+    break;
   default:
     Serial.println("No valid choice");
   }
@@ -55,6 +60,7 @@ void PrintQuery()
   Serial.println("5: Read fast forward button state");
   Serial.println("6: Read PIN");
   Serial.println("7: Set DCF77 Clock");
+  Serial.println("8: Go to Start");
   Serial.println("Enter your choice:");
 }
 
@@ -113,7 +119,6 @@ void SearchForZeroPosition()
     }
     else
     {
-
         break;
     }
   }

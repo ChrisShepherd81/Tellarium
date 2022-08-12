@@ -25,7 +25,6 @@ public:
   void makeStep();
   void makeSteps(int steps);
   void setSpeed(int speed);
-  void searchZeroPosition();
   void stopMotor();
 
 private:
