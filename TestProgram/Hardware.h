@@ -4,6 +4,8 @@
 #include <Button.h>
 #include "DCF77.h"
 
+#define DCFSplitTime 140
+
 #define BUTTON_PIN 53
 Button FastForwardButton(BUTTON_PIN);
 
@@ -13,7 +15,7 @@ Button FastForwardButton(BUTTON_PIN);
 class DCFClock
 {
 public:
-  DCFClock() : m_dcf(DCF_PIN,DCF_INTERRUPT)
+  DCFClock() : m_dcf(DCF_PIN,DCF_INTERRUPT, true)
   {
     m_dcf.Start();
   }
