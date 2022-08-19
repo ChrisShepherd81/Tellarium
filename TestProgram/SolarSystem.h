@@ -77,11 +77,12 @@ void GoToStartPosition()
         {
           SolarSystem[i]->makeStep();
         }
-        else
-        {
-          SolarSystem[i]->stopMotor();
-        }
      }
+  }
+  
+  for(int i = 0; i < NUMBER_OF_PLANETS; ++i)
+  {
+    SolarSystem[i]->stopMotor();
   }
 }
 
