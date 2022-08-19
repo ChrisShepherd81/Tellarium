@@ -29,9 +29,15 @@ Planet Earth("Earth", PlanetType::Earth, MOTOR_STEPS_PER_RESOLUTION, EARTH_PINS,
 #define MARS_REAL_SECONDS_PER_STEP 197850
 Planet Mars("Mars", PlanetType::Mars, MOTOR_STEPS_PER_RESOLUTION, MARS_PINS, MARS_ZERO_POS_PIN, MARS_REAL_SECONDS_PER_STEP);
 
+#define GLOBAL_STEP_DELAY 4L * 60L * 1000L * 1000L / MOTOR_STEPS_PER_RESOLUTION / 10L
+
 Planet* SolarSystem[NUMBER_OF_PLANETS];
 void SetUpSolarSystem()
 {
+  Mercury.setSpeed(10);
+  Venus.setSpeed(10);
+  Earth.setSpeed(10);
+  Mars.setSpeed(10);
   SolarSystem[0] = &Mercury;
   SolarSystem[1] = &Venus;
   SolarSystem[2] = &Earth;
@@ -51,39 +57,50 @@ bool AllPlanetsInReferencePosition()
   return true;
 }
 
-void GoToStartPosition()
+void StopAllMotors()
 {
-  SetUpSolarSystem();
-  
-  Mercury.setSpeed(10);
-  Venus.setSpeed(10);
-  Earth.setSpeed(10);
-  Mars.setSpeed(10);
-
-  for(int i = 0; i < NUMBER_OF_PLANETS; ++i)
-  {
-    // already (near) at reference position
-    while(SolarSystem[i]->isReferencePositionReached())
-    {
-      SolarSystem[i]->makeSteps(5);
-    }
-  }
-
-  while(!AllPlanetsInReferencePosition())
-  {
-     for(int i = 0; i < NUMBER_OF_PLANETS; ++i)
-     {
-        if(!SolarSystem[i]->isReferencePositionReached())
-        {
-          SolarSystem[i]->makeStep();
-        }
-     }
-  }
-  
   for(int i = 0; i < NUMBER_OF_PLANETS; ++i)
   {
     SolarSystem[i]->stopMotor();
   }
+}
+
+void SolarSystemStep(int steps, bool keep_in_reference_position = true)
+{
+  unsigned long last_step_time = 0;
+  
+  while (steps > 0)
+  {
+    unsigned long now = micros();
+    // move only if the appropriate delay has passed:
+    if (now - last_step_time >= GLOBAL_STEP_DELAY)
+    {
+      // get the timeStamp of when you stepped:
+      last_step_time = now;
+      // decrement the steps left:
+      steps--;
+      for(int i = 0; i < NUMBER_OF_PLANETS; ++i)
+      {
+        if(keep_in_reference_position && SolarSystem[i]->isReferencePositionReached())
+          continue;
+        else  
+          SolarSystem[i]->makeSteps(1);
+      }
+    }
+  }
+}
+
+void GoToStartPosition()
+{
+  SetUpSolarSystem();
+  SolarSystemStep(5, false);
+
+  while(!AllPlanetsInReferencePosition())
+  {
+    SolarSystemStep(1);
+  }
+  
+  StopAllMotors();
 }
 
 #endif // SOLARSYSTEM_H
