@@ -42,6 +42,8 @@ void loop() {
   case 8:
     GoToStartPosition();
     break;
+  case 9:
+    MeasurePlanetSteps();  
   default:
     Serial.println("No valid choice");
   }
@@ -61,7 +63,69 @@ void PrintQuery()
   Serial.println("6: Read PIN");
   Serial.println("7: Set DCF77 Clock");
   Serial.println("8: Go to Start");
+  Serial.println("9: Measure Steps per Planet");
   Serial.println("Enter your choice:");
+}
+
+void MeasurePlanetSteps()
+{
+  Serial.println("Measure Steps per planet routine");
+  Serial.println("Moving all planets to start position");
+  GoToStartPosition();
+  Serial.println("Start position reached");
+
+  int numberOfSpeeds = 5;
+  int speed[numberOfSpeeds] = {5,10,15,20,25};
+
+  int numberOfTestsToRun = 5;
+
+  //Planet loop
+  for(int i=0; i < NUMBER_OF_PLANETS; ++i)
+  {
+    Planet* planet = SolarSystem[i];
+
+    //Check if planet reached reference position
+    if(planet->isReferencePositionReached())
+    {
+      Serial.println(planet->getName() + " is in reference position");  
+    }
+    else
+    {
+      Serial.println("FAIL: " + planet->getName() + " is not in reference position");  
+      continue;
+    }
+
+    //Speed Loop
+    for(int i=0; i<numberOfSpeeds; ++i)
+    {
+      Serial.println("Set speed for " + planet->getName() + " to " + String(speed[i]) );
+      planet->setSpeed(speed[i]);
+
+      //Tests loop
+      for(int j=1; j <= numberOfTestsToRun; ++j)
+      {
+        //Reset steps 
+        planet->resetSteps();
+
+        //If planets do not move at all uncomment the following line
+        //planet->makeSteps(10);        
+
+        do
+        {
+          if(Serial.available() > 1)
+          {
+            //Abort routine
+            return;
+          }
+
+          planet->makeStep();
+        }
+        while(!planet->isReferencePositionReached());
+        
+        Serial.println("Nr. " + String(j) + ": " + planet->getName() + " made " + planet->getSteps() + " for speed " + String(speed[i]));
+      }
+    }    
+  }
 }
 
 void SetTime()
