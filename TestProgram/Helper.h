@@ -2,13 +2,6 @@
 #define HELPER_H
 
 #include <Arduino.h>
-#include <TimeLib.h>
-
-void PrintTime()
-{
-  time_t t = now();
-  Serial.println("Current time is " + String(hour(t)) + ":" + String(minute(t)) + ":" + String(second(t)) + " " + String(day(t)) + "." + String(month(t)) + "." + String(year(t)));
-}
 
 void WaitForSerialInput()
 {

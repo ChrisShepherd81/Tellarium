@@ -1,12 +1,13 @@
 #include "SolarSystem.h"
 #include "Hardware.h"
 #include "Helper.h"
+#include "TimeActions.h"
 
 
 void setup() {
   Serial.begin(9600);
   Serial.print("TestProgram Planetarium\n"
-               "(c) 2021 Astronomische Arbeitskreis Salzkammergut\n"
+               "(c) 2021-2022 Astronomische Arbeitskreis Salzkammergut\n"
                "\n\n");
 
   FastForwardButton.begin();
@@ -28,16 +29,17 @@ void loop() {
     SearchForZeroPosition(); 
     break;
   case 4:
+    SetTimeManually();
     PrintTime();
     break;
   case 5:
-    ReadButtonState();
+    PrintTime();
     break;
   case 6:
     ReadPin();
     break;
   case 7:
-    SetTime();
+    SetTimeFromDCF();
     break;
   case 8:
     GoToStartPosition();
@@ -58,8 +60,8 @@ void PrintQuery()
   Serial.println("1: Run a single planet (speed=100RPM)");
   Serial.println("2: Run all planets (speed=30RPM)");
   Serial.println("3: Search planet's zero position");
-  Serial.println("4: Print current time");
-  Serial.println("5: Read fast forward button state");
+  Serial.println("4: Set current time manually");
+  Serial.println("5: Print Time");
   Serial.println("6: Read PIN");
   Serial.println("7: Set DCF77 Clock");
   Serial.println("8: Go to Start");
@@ -128,25 +130,6 @@ void MeasurePlanetSteps()
   }
 }
 
-void SetTime()
-{
-  DCFClock dcf_clock;
-  Serial.println("Waiting for DCF77 time ... ");
-  Serial.println("It will take at least 2 minutes before a first time update.");
-  
-  while(Serial.available() <= 1)
-  {
-    if(dcf_clock.UpdateTime())
-    {
-      Serial.println("Time successfully update");
-      PrintTime();
-      return;
-    }
-    
-    delay(1000);
-    Serial.println("Please wait...");
-  }
-}
 
 void ReadPin()
 {
