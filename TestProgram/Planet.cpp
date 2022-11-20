@@ -1,14 +1,17 @@
 #include "Planet.h"
+#include <TimeLib.h>
 
 Planet::Planet(String name, PlanetType type,
      int steps_per_360_degree,
      int pin_1, int pin_2, int pin_3, int pin_4,
      int reed_pin,
+     unsigned int step_for_sidereal_orbit,
      unsigned long real_seconds_per_step)
   : m_Name(name)
   , m_Type(type)
   , m_Stepper(steps_per_360_degree, pin_1, pin_2, pin_3, pin_4)
   , m_ReedContact(reed_pin)
+  , m_StepsPerOrbit(step_for_sidereal_orbit)
   , m_RealSecondsPerStep(real_seconds_per_step)
 {
   pinMode(m_ReedContact, INPUT);
@@ -49,6 +52,13 @@ void Planet::makeSteps(int steps)
 void Planet::setSpeed(int speed)
 {
   m_Stepper.setSpeed(speed);
+}
+
+unsigned int Planet::getPositionForCurrentTime() const
+{
+  unsigned long secs_per_orbit = m_RealSecondsPerStep * m_StepsPerOrbit;
+  unsigned long secs_till_reference = now() % secs_per_orbit;
+  return secs_till_reference / m_RealSecondsPerStep;
 }
 
 void Planet::stopMotor()

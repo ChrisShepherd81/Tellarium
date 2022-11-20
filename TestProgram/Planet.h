@@ -13,11 +13,14 @@ public:
          int steps_per_360_degree,
          int pin_1, int pin_2, int pin_3, int pin_4,
          int reed_pin,
+         unsigned int step_for_sidereal_orbit,
          unsigned long real_seconds_per_step);
 
   PlanetType getType() const;  
   String getName() const;
   unsigned long getSteps() const;
+  
+  unsigned int getPositionForCurrentTime() const;
 
   bool isReferencePositionReached();
   void resetSteps();
@@ -27,11 +30,14 @@ public:
   void setSpeed(int speed);
   void stopMotor();
 
+  void goToCurrentTime();
+
 private:
   String m_Name;
   PlanetType m_Type;
   Stepper m_Stepper;
   int m_ReedContact;
+  unsigned int m_StepsPerOrbit;
   unsigned long m_RealSecondsPerStep;
   int m_Pins[4];
   
