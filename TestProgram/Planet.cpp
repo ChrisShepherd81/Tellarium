@@ -41,7 +41,8 @@ void Planet::makeStep()
 
 void Planet::makeSteps(int steps)
 {
-  m_Stepper.step(steps);
+  //Reverse direction
+  m_Stepper.step(-steps);
   m_StepsMade += steps;
 }
 
