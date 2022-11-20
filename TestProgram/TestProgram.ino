@@ -46,6 +46,10 @@ void loop() {
     break;
   case 9:
     MeasurePlanetSteps();  
+    break;
+  case 10:
+    GoToCurrentDate();
+    break;
   default:
     Serial.println("No valid choice");
   }
@@ -57,7 +61,7 @@ void PrintQuery()
 {
   ClearSerial();
   Serial.println("Choose test routine to run:");
-  Serial.println("1: Run a single planet (speed=100RPM)");
+  Serial.println("1: Run a single planet (speed=15RPM)");
   Serial.println("2: Run all planets (speed=30RPM)");
   Serial.println("3: Search planet's zero position");
   Serial.println("4: Set current time manually");
@@ -66,7 +70,39 @@ void PrintQuery()
   Serial.println("7: Set DCF77 Clock");
   Serial.println("8: Go to Start");
   Serial.println("9: Measure Steps per Planet");
+  Serial.println("10: Got to current data");
   Serial.println("Enter your choice:");
+}
+
+void GoToCurrentDate()
+{
+  Serial.println("Go to current date routine");
+  Serial.println("Moving all planets to start position");
+  GoToStartPosition();
+  Serial.println("Start position reached");
+
+  //Planet loop
+  for(int i=0; i < NUMBER_OF_PLANETS; ++i)
+  {
+    Planet* planet = SolarSystem[i];
+
+    //Check if planet reached reference position
+    if(planet->isReferencePositionReached())
+    {
+      Serial.println(planet->getName() + " is in reference position");  
+      planet->resetSteps();
+    }
+    else
+    {
+      Serial.println("FAIL: " + planet->getName() + " is not in reference position");  
+      continue;
+    }
+
+    unsigned int position_for_planet = planet->getPositionForCurrentTime();
+    Serial.println("Moving: " + planet->getName() + " to position " + String(position_for_planet));  
+
+    planet->makeSteps(position_for_planet);
+  }
 }
 
 void MeasurePlanetSteps()
@@ -109,8 +145,8 @@ void MeasurePlanetSteps()
         //Reset steps 
         planet->resetSteps();
 
-        //If planets do not move at all uncomment the following line
-        //planet->makeSteps(10);        
+        //Move away from reference position
+        planet->makeSteps(20);
 
         do
         {
@@ -216,10 +252,19 @@ Planet* ChoosePlanet()
 void RunPlanet(Planet* planet)
 {
   Serial.println("Running planet " + planet->getName());
-  planet->setSpeed(100);
+  Serial.println("Enter number of steps, 0 for continous run:");
+  int steps_to_make = ReadIntFromSerial();  
+
+  planet->setSpeed(15);
   while(Serial.available() <= 0)
   {
-    planet->makeStep();
+    if(steps_to_make == 0)
+      planet->makeStep();
+    else
+    {
+      planet->makeSteps(steps_to_make);
+      break;
+    }  
   }
   planet->stopMotor();
 }
