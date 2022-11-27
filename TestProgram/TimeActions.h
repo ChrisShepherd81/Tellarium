@@ -13,7 +13,7 @@ void PrintTime()
 
 void SetTimeManually()
 {
-  Serial.println("Enter current date in format MM.DD.YYYY :");
+  Serial.println("Enter current date in format DD.MM.YYYY :");
   while (Serial.available() == 0) {}     //wait for data available
   String date_string = Serial.readString();  
   int day = date_string.substring(0,2).toInt();
