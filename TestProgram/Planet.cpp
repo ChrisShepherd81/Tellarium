@@ -6,13 +6,13 @@ Planet::Planet(String name, PlanetType type,
      int pin_1, int pin_2, int pin_3, int pin_4,
      int reed_pin,
      unsigned int step_for_sidereal_orbit,
-     unsigned long real_seconds_per_step)
+     unsigned long long real_seconds_per_orbit)
   : m_Name(name)
   , m_Type(type)
   , m_Stepper(steps_per_360_degree, pin_1, pin_2, pin_3, pin_4)
   , m_ReedContact(reed_pin)
   , m_StepsPerOrbit(step_for_sidereal_orbit)
-  , m_RealSecondsPerStep(real_seconds_per_step)
+  , m_RealSecondsPerOrbit(real_seconds_per_orbit)
 {
   pinMode(m_ReedContact, INPUT);
   m_Pins[0] = pin_1;
@@ -56,9 +56,9 @@ void Planet::setSpeed(int speed)
 
 unsigned int Planet::getPositionForCurrentTime() const
 {
-  unsigned long secs_per_orbit = m_RealSecondsPerStep * m_StepsPerOrbit;
-  unsigned long secs_till_reference = now() % secs_per_orbit;
-  return secs_till_reference / m_RealSecondsPerStep;
+  unsigned long long seconds_for_current_position = now() % m_RealSecondsPerOrbit;
+  unsigned long long seconds_per_step = m_RealSecondsPerOrbit / m_StepsPerOrbit;
+  return seconds_for_current_position / seconds_per_step;
 }
 
 void Planet::stopMotor()
