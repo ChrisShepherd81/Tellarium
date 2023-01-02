@@ -21,6 +21,7 @@ public:
   unsigned long getSteps() const;
   
   unsigned int getPositionForCurrentTime() const;
+  unsigned long long getSecondsBetweenSteps() const;
 
   bool isReferencePositionReached();
   void resetSteps();

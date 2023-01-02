@@ -50,6 +50,9 @@ void loop() {
   case 10:
     GoToCurrentDate();
     break;
+  case 11:
+    FastRun();
+    break;
   default:
     Serial.println("No valid choice");
   }
@@ -71,7 +74,76 @@ void PrintQuery()
   Serial.println("8: Go to Start");
   Serial.println("9: Measure Steps per Planet");
   Serial.println("10: Got to current data");
+  Serial.println("11: Fast run");
   Serial.println("Enter your choice:");
+}
+
+unsigned long long GetSimulatedTime()
+{
+  static unsigned long long simulated_time = 0;
+  static unsigned long long last_time = now();
+
+  // with this speed earth will make a step every second
+  auto const simulated_seconds_per_second = 105194;
+  auto current_time = now();
+
+  auto time_diff_in_sec = (current_time-last_time)/1000.0;
+  last_time = current_time;
+  simulated_time += time_diff_in_sec*simulated_seconds_per_second;
+
+  return simulated_time;
+}
+
+void FastRun()
+{
+  Serial.println("Fast run of solar system");
+  Serial.println("Press a key to stop.");
+
+  //Initalize planets
+  for(int i=0; i < NUMBER_OF_PLANETS; ++i)
+  {
+    Planet* planet = SolarSystem[i];
+    planet->resetSteps();
+    //Speed is calculated outside and should not be used -> set to high value
+    planet->setSpeed(1000);
+  }
+
+  //run loop
+  while(Serial.available() <= 0)
+  {
+    auto simulated_time = GetSimulatedTime();
+    
+    //Planet loop
+    for(int i=0; i < NUMBER_OF_PLANETS; ++i)
+    {
+      Planet* planet = SolarSystem[i];
+      auto steps_made = planet->getSteps();
+      auto seconds_between_steps = planet->getSecondsBetweenSteps();
+      if(simulated_time > seconds_between_steps * steps_made)
+      {
+        planet->makeStep();
+      }
+    }
+  }
+
+  Serial.println("Fast run stopped. Returning planets to old positions.");
+
+  // Test if planet can be reset backwards.
+  // Might not work because of backlash
+  while(!AllStepsZero())
+  {
+    for(int i=0; i < NUMBER_OF_PLANETS; ++i)
+    {
+      Planet* planet = SolarSystem[i];
+      if(planet->getSteps() == 0)
+        continue;
+
+      planet->setSpeed(15);
+      planet->makeSteps(-1);
+    }
+  }  
+
+  Serial.println("Old positions reached. Routine end reached.");
 }
 
 void GoToCurrentDate()

@@ -48,6 +48,18 @@ void SetUpSolarSystem()
   SolarSystem[3] = &Mars;
 }
 
+bool AllStepsZero()
+{
+  for(int i = 0; i < NUMBER_OF_PLANETS; ++i)
+  {
+    if(SolarSystem[i]->getSteps() != 0)
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
 bool AllPlanetsInReferencePosition()
 {
   for(int i = 0; i < NUMBER_OF_PLANETS; ++i)

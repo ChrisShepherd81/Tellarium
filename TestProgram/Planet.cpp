@@ -31,7 +31,6 @@ unsigned long Planet::getSteps() const
   return m_StepsMade;
 }
 
-
 void Planet::resetSteps()
 {
   m_StepsMade = 0;
@@ -54,11 +53,15 @@ void Planet::setSpeed(int speed)
   m_Stepper.setSpeed(speed);
 }
 
+unsigned long long Planet::getSecondsBetweenSteps() const
+{
+  return m_RealSecondsPerOrbit / m_StepsPerOrbit;
+}
+
 unsigned int Planet::getPositionForCurrentTime() const
 {
   unsigned long long seconds_for_current_position = now() % m_RealSecondsPerOrbit;
-  unsigned long long seconds_per_step = m_RealSecondsPerOrbit / m_StepsPerOrbit;
-  return seconds_for_current_position / seconds_per_step;
+  return seconds_for_current_position / getSecondsBetweenSteps();
 }
 
 void Planet::stopMotor()
