@@ -81,18 +81,23 @@ void PrintQuery()
 unsigned long long GetSimulatedTime()
 {
   static unsigned long long simulated_time = 0;
-  static unsigned long long last_time = now();
+  static time_t last_time = now();
 
   // with this speed earth will make a step every second
-  auto const simulated_seconds_per_second = 105194;
-  auto current_time = now();
+  unsigned long const simulated_seconds_per_second = 105194;
+  time_t current_time = now();
 
-  auto time_diff_in_sec = (current_time-last_time)/1000.0;
-  last_time = current_time;
-  simulated_time += time_diff_in_sec*simulated_seconds_per_second;
-
+  unsigned long time_diff_in_sec = numberOfSeconds(current_time)-numberOfSeconds(last_time);
+  if(time_diff_in_sec > 0)
+  {    
+    last_time = current_time;
+    simulated_time += time_diff_in_sec*simulated_seconds_per_second;
+    Serial.print("Simulated Time: ");
+    Serial.println((unsigned long)simulated_time);
+  }
   return simulated_time;
 }
+
 
 void FastRun()
 {
@@ -108,6 +113,7 @@ void FastRun()
     planet->setSpeed(1000);
   }
 
+  Serial.println("Planets initalized.");
   //run loop
   while(Serial.available() <= 0)
   {
