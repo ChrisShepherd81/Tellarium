@@ -14,15 +14,15 @@ public:
          int pin_1, int pin_2, int pin_3, int pin_4,
          int reed_pin,
          unsigned int step_for_sidereal_orbit,
-         unsigned long long real_seconds_per_orbit);
+         unsigned long real_seconds_per_orbit);
 
   PlanetType getType() const;  
   String getName() const;
-  unsigned int getSteps() const;
+  unsigned long getSteps() const;
   void addSteps(int steps);
   
   unsigned int getPositionForCurrentTime() const;
-  unsigned long long getSecondsBetweenSteps() const;
+  unsigned long getSecondsBetweenSteps() const;
 
   bool isReferencePositionReached();
   void resetSteps();
@@ -41,7 +41,7 @@ private:
   Stepper m_Stepper;
   int m_ReedContact;
   unsigned int m_StepsPerOrbit;
-  unsigned long long m_RealSecondsPerOrbit;
+  unsigned long m_RealSecondsPerOrbit;
   int m_Pins[4];
   
   unsigned long m_StepsMade = 0;

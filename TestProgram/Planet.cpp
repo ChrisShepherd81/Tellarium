@@ -6,7 +6,7 @@ Planet::Planet(String name, PlanetType type,
      int pin_1, int pin_2, int pin_3, int pin_4,
      int reed_pin,
      unsigned int step_for_sidereal_orbit,
-     unsigned long long real_seconds_per_orbit)
+     unsigned long real_seconds_per_orbit)
   : m_Name(name)
   , m_Type(type)
   , m_Stepper(steps_per_360_degree, pin_1, pin_2, pin_3, pin_4)
@@ -26,14 +26,14 @@ PlanetType Planet::getType() const
   return m_Type;
 }
 
-unsigned int Planet::getSteps() const
+unsigned long Planet::getSteps() const
 {
   return m_StepsMade;
 }
 
 void Planet::addSteps(int steps)
 {
-   m_StepsMade = (m_StepsMade + steps)%m_StepsPerOrbit;
+   m_StepsMade += steps;
 }
 
 void Planet::resetSteps()
@@ -66,7 +66,7 @@ void Planet::disableSpeedDelay()
   setSpeed(600000L);  
 }
 
-unsigned long long Planet::getSecondsBetweenSteps() const
+unsigned long Planet::getSecondsBetweenSteps() const
 {
   return m_RealSecondsPerOrbit / m_StepsPerOrbit;
 }

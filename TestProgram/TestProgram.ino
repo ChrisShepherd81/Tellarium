@@ -78,27 +78,6 @@ void PrintQuery()
   Serial.println("Enter your choice:");
 }
 
-unsigned long long GetSimulatedTime()
-{
-  static unsigned long long simulated_time = 0;
-  static time_t last_time = now();
-
-  // with this speed earth will make a step every second
-  unsigned long const simulated_seconds_per_second = 105194;
-  time_t current_time = now();
-
-  unsigned long time_diff_in_sec = numberOfSeconds(current_time)-numberOfSeconds(last_time);
-  if(time_diff_in_sec > 0)
-  {    
-    last_time = current_time;
-    simulated_time += time_diff_in_sec*simulated_seconds_per_second;
-    Serial.print("Simulated Time: ");
-    Serial.println((unsigned long)simulated_time);
-  }
-  return simulated_time;
-}
-
-
 void FastRun()
 {
   Serial.println("Fast run of solar system");
@@ -109,26 +88,34 @@ void FastRun()
   {
     Planet* planet = SolarSystem[i];
     planet->resetSteps();
-    //Speed is calculated outside and should not be used -> set to high value
-    planet->setSpeed(1000);
+    planet->disableSpeedDelay();
   }
 
+  //Speed of fast run depends on Mercury's speed
+  Mercury.setSpeed(15);
   Serial.println("Planets initalized.");
+ 
   //run loop
+  double mv_ratio = Venus.getSecondsBetweenSteps() / Mercury.getSecondsBetweenSteps();
+  double me_ratio = Earth.getSecondsBetweenSteps() / Mercury.getSecondsBetweenSteps();
+  double mm_ratio = Mars.getSecondsBetweenSteps() / Mercury.getSecondsBetweenSteps();
   while(Serial.available() <= 0)
   {
-    auto simulated_time = GetSimulatedTime();
-    
-    //Planet loop
-    for(int i=0; i < NUMBER_OF_PLANETS; ++i)
+    Mercury.makeStep();
+
+    if(Mercury.getSteps() / mv_ratio >= Venus.getSteps() + 1)
     {
-      Planet* planet = SolarSystem[i];
-      auto steps_made = planet->getSteps();
-      auto seconds_between_steps = planet->getSecondsBetweenSteps();
-      if(simulated_time > seconds_between_steps * steps_made)
-      {
-        planet->makeStep();
-      }
+      Venus.makeStep();
+    }
+
+    if(Mercury.getSteps() / me_ratio >= Earth.getSteps() + 1)
+    {
+      Earth.makeStep();
+    }
+
+    if(Mercury.getSteps() / mm_ratio >= Mars.getSteps() + 1)
+    {
+      Mars.makeStep();
     }
   }
 
@@ -141,7 +128,7 @@ void FastRun()
     for(int i=0; i < NUMBER_OF_PLANETS; ++i)
     {
       Planet* planet = SolarSystem[i];
-      if(planet->getSteps() <= 0)
+      if(planet->getSteps()%300 <= 0)
         continue;
 
       planet->setSpeed(15);
