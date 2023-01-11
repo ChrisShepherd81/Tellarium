@@ -52,7 +52,7 @@ bool AllStepsZero()
 {
   for(int i = 0; i < NUMBER_OF_PLANETS; ++i)
   {
-    if(SolarSystem[i]->getSteps() != 0)
+    if(SolarSystem[i]->getSteps() >= 0)
     {
       return false;
     }

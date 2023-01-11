@@ -141,7 +141,7 @@ void FastRun()
     for(int i=0; i < NUMBER_OF_PLANETS; ++i)
     {
       Planet* planet = SolarSystem[i];
-      if(planet->getSteps() == 0)
+      if(planet->getSteps() <= 0)
         continue;
 
       planet->setSpeed(15);

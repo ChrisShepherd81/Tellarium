@@ -26,9 +26,14 @@ PlanetType Planet::getType() const
   return m_Type;
 }
 
-unsigned long Planet::getSteps() const
+unsigned int Planet::getSteps() const
 {
   return m_StepsMade;
+}
+
+void Planet::addSteps(int steps)
+{
+   m_StepsMade = (m_StepsMade + steps)%m_StepsPerOrbit;
 }
 
 void Planet::resetSteps()
@@ -45,7 +50,7 @@ void Planet::makeSteps(int steps)
 {
   //Reverse direction
   m_Stepper.step(-steps);
-  m_StepsMade += steps;
+  addSteps(steps);
 }
 
 void Planet::setSpeed(int speed)
