@@ -53,9 +53,17 @@ void Planet::makeSteps(int steps)
   addSteps(steps);
 }
 
-void Planet::setSpeed(int speed)
+void Planet::setSpeed(long speed)
 {
   m_Stepper.setSpeed(speed);
+}
+
+void Planet::disableSpeedDelay()
+{
+  // Step delay is calucalted in Stepper.cpp like this:
+  // unsigned long step_delay = 60L * 1000L * 1000L / number_of_steps=100 / speed;
+  // So setting it to 1 us should more or less disable the delay
+  setSpeed(600000L);  
 }
 
 unsigned long long Planet::getSecondsBetweenSteps() const

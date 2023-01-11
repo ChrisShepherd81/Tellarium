@@ -29,7 +29,8 @@ public:
 
   void makeStep();
   void makeSteps(int steps);
-  void setSpeed(int speed);
+  void setSpeed(long speed);
+  void disableSpeedDelay();
   void stopMotor();
 
   void goToCurrentTime();
