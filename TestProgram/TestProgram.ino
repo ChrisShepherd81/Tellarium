@@ -3,7 +3,6 @@
 #include "Helper.h"
 #include "TimeActions.h"
 
-
 void setup() {
   Serial.begin(9600);
   Serial.print("TestProgram Planetarium\n"
@@ -88,7 +87,7 @@ void FastRun()
   for(int i=0; i < NUMBER_OF_PLANETS; ++i)
   {
     Planet* planet = SolarSystem[i];
-    planet->resetSteps();
+    planet->prepareFastRun();
     planet->disableSpeedDelay();
   }
 
@@ -105,31 +104,25 @@ void FastRun()
     Mercury.makeStep();
 
     if(Mercury.getSteps() / mv_ratio >= Venus.getSteps() + 1)
-    {
       Venus.makeStep();
-    }
 
     if(Mercury.getSteps() / me_ratio >= Earth.getSteps() + 1)
-    {
       Earth.makeStep();
-    }
 
     if(Mercury.getSteps() / mm_ratio >= Mars.getSteps() + 1)
-    {
       Mars.makeStep();
-    }
   }
 
   Serial.println("Fast run stopped. Returning planets to old positions.");
 
   // Test if planet can be reset backwards.
   // Might not work because of backlash
-  while(!AllStepsZero())
+  while(!AllPlanetsInOldPosition())
   {
     for(int i=0; i < NUMBER_OF_PLANETS; ++i)
     {
       Planet* planet = SolarSystem[i];
-      if(planet->getSteps()%300 <= 0)
+      if(planet->oldPositionReached())
         continue;
 
       planet->setSpeed(15);

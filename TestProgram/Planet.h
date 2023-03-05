@@ -35,6 +35,9 @@ public:
 
   void goToCurrentTime();
 
+  void prepareFastRun();
+  bool oldPositionReached() const;
+
 private:
   String m_Name;
   PlanetType m_Type;
@@ -45,6 +48,7 @@ private:
   int m_Pins[4];
   
   unsigned long m_StepsMade = 0;
+  unsigned long m_FastRunOldPosition = 0;
 };
 
 #endif // PLANET_H

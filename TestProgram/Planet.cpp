@@ -26,6 +26,16 @@ PlanetType Planet::getType() const
   return m_Type;
 }
 
+void Planet::prepareFastRun()
+{
+  m_FastRunOldPosition = m_StepsMade;
+}
+
+bool Planet::oldPositionReached() const
+{
+  return m_FastRunOldPosition == m_StepsMade;
+}
+
 unsigned long Planet::getSteps() const
 {
   return m_StepsMade;
