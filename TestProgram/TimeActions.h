@@ -42,12 +42,14 @@ void SetTimeFromDCF()
   {
     if(dcf_clock.UpdateTime())
     {
+      digitalWrite(PIN_LED_DCF_RECEIVED, HIGH);
       Serial.println("Time successfully update");
       PrintTime();
       return;
     }
-    
+    digitalWrite(PIN_LED_DCF_RECEIVED, HIGH);
     delay(1000);
+    digitalWrite(PIN_LED_DCF_RECEIVED, LOW);
     Serial.println("Please wait...");
   }
 }
