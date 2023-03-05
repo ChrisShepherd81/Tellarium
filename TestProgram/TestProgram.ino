@@ -123,11 +123,17 @@ void FastRun()
     for(int i=0; i < NUMBER_OF_PLANETS; ++i)
     {
       Planet* planet = SolarSystem[i];
-      if(planet->oldPositionReached())
-        continue;
-
       planet->setSpeed(15);
-      planet->makeSteps(-1);
+
+      if(planet->oldPositionReached())
+      {
+        Serial.println("Planet reached old position: " + planet->getName());
+      }
+      else
+      {
+        Serial.println("Planet " + planet->getName() + " at position: " + String(planet->getPosition()));
+        planet->makeSteps(-1);
+      }
     }
   }  
 

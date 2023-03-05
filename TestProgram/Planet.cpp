@@ -38,6 +38,11 @@ bool Planet::oldPositionReached() const
   return m_FastRunOldPosition == m_Position;
 }
 
+unsigned long Planet::getPosition() const
+{
+  return m_Position;
+}
+
 unsigned long Planet::getSteps() const
 {
   return m_StepsMade;

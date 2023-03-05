@@ -34,6 +34,7 @@ public:
   void stopMotor();
 
   void prepareFastRun();
+  unsigned long getPosition() const;
   bool oldPositionReached() const;
 
 private:

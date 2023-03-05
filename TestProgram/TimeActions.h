@@ -48,8 +48,9 @@ void SetTimeFromDCF()
       return;
     }
     digitalWrite(PIN_LED_DCF_RECEIVED, HIGH);
-    delay(1000);
+    delay(500);
     digitalWrite(PIN_LED_DCF_RECEIVED, LOW);
+    delay(500);
     Serial.println("Please wait...");
   }
 }

@@ -69,12 +69,18 @@ bool AllPlanetsInReferencePosition()
   return true;
 }
 
-void StopAllMotors()
+void ForAllPlanets(void (*function)(Planet*))
 {
   for(int i = 0; i < NUMBER_OF_PLANETS; ++i)
   {
-    SolarSystem[i]->stopMotor();
+    function(SolarSystem[i]);
   }
+}
+
+void StopAllMotors()
+{
+  auto stop = [](Planet* p) {p->stopMotor();};
+  ForAllPlanets(stop);
 }
 
 void SolarSystemStep(int steps, bool keep_in_reference_position = true)
