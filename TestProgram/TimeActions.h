@@ -2,7 +2,6 @@
 #define TIMEACTIONS_H
 
 #include "Hardware.h"
-
 #include <TimeLib.h>
 
 void PrintTime()
@@ -30,7 +29,7 @@ void SetTimeManually()
   int second = time_string.substring(6,8).toInt();  
   Serial.println("Setting time to " + String(hour) + ":" + String(minute) + ":" + String(second));
   
-  setTime(hour, minute, second, day, month, year);
+  SetArduinoTime(hour, minute, second, day, month, year);
 }
 
 void SetTimeFromDCF()
@@ -54,4 +53,3 @@ void SetTimeFromDCF()
 }
 
 #endif // TIMEACTIONS_H
-
