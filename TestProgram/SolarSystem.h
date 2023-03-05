@@ -63,9 +63,7 @@ bool AllPlanetsInReferencePosition()
   for(int i = 0; i < NUMBER_OF_PLANETS; ++i)
   {
     if(!SolarSystem[i]->isReferencePositionReached())
-    {
       return false;
-    }
   }
 
   return true;

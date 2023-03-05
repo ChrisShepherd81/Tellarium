@@ -88,6 +88,7 @@ void FastRun()
   {
     Planet* planet = SolarSystem[i];
     planet->prepareFastRun();
+    planet->resetSteps();
     planet->disableSpeedDelay();
   }
 
@@ -224,7 +225,6 @@ void MeasurePlanetSteps()
     }    
   }
 }
-
 
 void ReadPin()
 {

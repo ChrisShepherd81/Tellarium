@@ -1,4 +1,6 @@
 #include "Planet.h"
+#include "Helper.h"
+
 #include <TimeLib.h>
 
 Planet::Planet(String name, PlanetType type,
@@ -28,22 +30,17 @@ PlanetType Planet::getType() const
 
 void Planet::prepareFastRun()
 {
-  m_FastRunOldPosition = m_StepsMade;
+  m_FastRunOldPosition = m_Position;
 }
 
 bool Planet::oldPositionReached() const
 {
-  return m_FastRunOldPosition == m_StepsMade;
+  return m_FastRunOldPosition == m_Position;
 }
 
 unsigned long Planet::getSteps() const
 {
   return m_StepsMade;
-}
-
-void Planet::addSteps(int steps)
-{
-   m_StepsMade += steps;
 }
 
 void Planet::resetSteps()
@@ -61,6 +58,12 @@ void Planet::makeSteps(int steps)
   //Reverse direction
   m_Stepper.step(-steps);
   addSteps(steps);
+}
+
+void Planet::addSteps(int steps)
+{
+   m_StepsMade += steps;
+   m_Position += (steps % m_StepsPerOrbit);
 }
 
 void Planet::setSpeed(long speed)
@@ -102,10 +105,9 @@ String Planet::getName() const
 
 bool Planet::isReferencePositionReached()
 {
-  for(int i=0; i < 100; ++i)
-  {
-    if(digitalRead(m_ReedContact) == 1)
-      return true;
-  }
-  return digitalRead(m_ReedContact) == 1;
+  if(!PollPinHigh(m_ReedContact))
+    return false;
+  
+  m_Position = 0;
+  return true;
 }
