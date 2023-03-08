@@ -68,7 +68,7 @@ void Planet::makeSteps(int steps)
 void Planet::addSteps(int steps)
 {
    m_StepsMade += steps;
-   m_Position += (steps % m_StepsPerOrbit);
+   m_Position = (m_Position + steps) % m_StepsPerOrbit;
 }
 
 void Planet::setSpeed(long speed)
