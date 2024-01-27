@@ -2,7 +2,7 @@
 #define PLANET_H
 
 #include <Arduino.h>
-#include <Stepper.h>
+#include <StepperMotor.h>
 
 enum class PlanetType{Mercury, Venus, Earth, Mars, Invalid};
 

@@ -97,10 +97,7 @@ unsigned int Planet::getPositionForCurrentTime() const
 
 void Planet::stopMotor()
 {
-  for(int i=0; i<4; ++i)
-  {
-    digitalWrite(m_Pins[i], LOW);
-  }
+  m_Stepper.stop();
 }
 
 String Planet::getName() const
