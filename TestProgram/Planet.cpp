@@ -68,7 +68,13 @@ void Planet::makeSteps(int steps)
 void Planet::addSteps(int steps)
 {
    m_StepsMade += steps;
-   m_Position = (m_Position + steps) % m_StepsPerOrbit;
+   int pos = m_Position + steps;
+   if(pos < 0)
+    m_Position = m_StepsPerOrbit - pos;
+   else if( pos > m_StepsPerOrbit)
+    m_Position = pos - m_StepsPerOrbit;
+   else
+    m_Position = pos;
 }
 
 void Planet::setSpeed(long speed)
@@ -78,7 +84,7 @@ void Planet::setSpeed(long speed)
 
 void Planet::disableSpeedDelay()
 {
-  // Step delay is calucalted in Stepper.cpp like this:
+  // Step delay is calcualted in Stepper.cpp like this:
   // unsigned long step_delay = 60L * 1000L * 1000L / number_of_steps=100 / speed;
   // So setting it to 1 us should more or less disable the delay
   setSpeed(600000L);  
