@@ -97,8 +97,7 @@ void Stepper::step(int steps_to_move)
 {
   if(this->motor_stopped)
   {
-    // restore last sequence before stopped
-    stepMotor(this->number_of_steps % 4);
+    steps_to_move = steps_to_move + 1;
     this->motor_stopped = false;
   }
   

@@ -6,7 +6,7 @@
 void setup() {
   Serial.begin(9600);
   Serial.print("TestProgram Planetarium\n"
-               "(c) 2021-2022 Astronomische Arbeitskreis Salzkammergut\n"
+               "(c) 2021-2024 Astronomische Arbeitskreis Salzkammergut\n"
                "\n\n");
 
   FastForwardButton.begin();
@@ -53,6 +53,9 @@ void loop() {
   case 11:
     FastRun();
     break;
+  case 12:
+    SingleSteppedRound();
+    break;
   default:
     Serial.println("No valid choice");
   }
@@ -75,7 +78,35 @@ void PrintQuery()
   Serial.println("9: Measure Steps per Planet");
   Serial.println("10: Got to current data");
   Serial.println("11: Fast run");
+  Serial.println("12: Round with single steps");
   Serial.println("Enter your choice:");
+}
+
+void SingleSteppedRound() {
+  Serial.println("Round with only single steps");
+  Serial.println("Moving all planets to start position");
+  GoToStartPosition();
+  Serial.println("Start position reached");
+
+  Planet* choosenPlanet = ChoosePlanet();
+  if(!choosenPlanet)
+  {
+    Serial.println("No valid choice");
+    return;
+  }
+
+  choosenPlanet->stopMotor();
+  choosenPlanet->resetSteps();
+
+  for(int i=0; i < 300; i++){
+    choosenPlanet->makeStep();
+    choosenPlanet->stopMotor();
+    Serial.println("Planet " + choosenPlanet->getName() + " made steps: " + String(choosenPlanet->getSteps()));
+    delay(1000);
+  } 
+
+  Serial.println("Routine end. Planet should have reached reference position again.");
+
 }
 
 void FastRun()
